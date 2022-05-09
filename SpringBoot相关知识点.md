@@ -15,7 +15,7 @@ JVM环境变量优先级>操作系统环境变量>application.properties>applica
 
 #### 二、SpringApplication对象.run()
 
-1、获取SpringApplicationRunListener-->EventPublishingRunListener
+1、获取SpringApplicationRunListener-->EventPublishingRunListener（发布事件）
 
 2、SpringApplicationRunListener.starting()
 
