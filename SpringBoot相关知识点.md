@@ -8,9 +8,9 @@ JVM环境变量优先级>操作系统环境变量>application.properties>applica
 
 2、从spring.factories中获取BootstrapRegistryInitializer对象
 
-3、initializers = 从spring.factiories中获取ApplicationContextInitializer对象
+3、initializers = 从spring.factories中获取ApplicationContextInitializer对象
 
-4、listeners = 从spring.factiories中获取ApplicationListener对象
+4、listeners = 从spring.factories中获取ApplicationListener对象
 
 
 #### 二、SpringApplication对象.run()
@@ -37,3 +37,8 @@ JVM环境变量优先级>操作系统环境变量>application.properties>applica
 
 11、SpringApplicationRunListener.ready()
 
+### SpringBoot 自动配置解析顺序
+
+1、先扫描（如@Compontent、@Bean、@Configuration等）-->得到自定义的配置
+
+2、执行AutonConfigurationImportSelector.selectImports()方法得到spring.factories中的自动配置类-->解析
