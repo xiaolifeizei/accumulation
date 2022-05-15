@@ -7,3 +7,7 @@
 2、关闭进程
 
 > kill -9 pid
+
+### 设置文件权限
+
+> sudo chomd 777 filename
