@@ -56,35 +56,44 @@
 
 
 ```
-public <T> T getObjectFromLoader(ColaCacheName cacheName, String key, Callable<T> valueLoader) {
-        if (ObjectUtil.isNull(valueLoader)) {
-            return null;
-        }
-        if (StrUtil.hasEmpty(cacheName.cacheName(),key)) {
-            return null;
-        }
+	@Override
+    	public <T> T getObject(ColaCacheName cacheName, String key) {
+		if (StrUtil.hasEmpty(cacheName.cacheName(),key)) {
+		    return null;
+		}
+		Cache.ValueWrapper valueWrapper = getCache(cacheName).get(key);
+		return valueWrapper == null ? null : (T) valueWrapper.get();
+    	}
 
-        Object value = getCache(cacheName).get(key);
+	public <T> T getObjectFromLoader(ColaCacheName cacheName, String key, Callable<T> valueLoader) {
+		if (ObjectUtil.isNull(valueLoader)) {
+		    return null;
+		}
+		if (StrUtil.hasEmpty(cacheName.cacheName(),key)) {
+		    return null;
+		}
 
-        if (ObjectUtil.isNull(value)) {
-            RedisUtil redisUtil = SpringUtil.getBean(RedisUtil.class);
-            boolean lock = redisUtil.lock(cacheName.cacheName() + key);
-            if (lock) {
-                try {
-                    return getCache(cacheName).get(key,valueLoader);
-                } finally {
-                    redisUtil.unLock(cacheName.cacheName() + key);
-                }
-            } else {
-                try {
-                    Thread.sleep(500);
-                } catch (Exception ignore) {
-                } finally {
-                    // 自旋
-                    getObjectFromLoader(cacheName, key, valueLoader);
-                }
-            }
-        }
-        return (T)value;
-    }
+		Object value = getObject(cacheName,key);
+
+		if (ObjectUtil.isNull(value)) {
+		    RedisUtil redisUtil = SpringUtil.getBean(RedisUtil.class);
+		    boolean lock = redisUtil.lock(cacheName.cacheName() + key);
+		    if (lock) {
+			try {
+			    return getCache(cacheName).get(key,valueLoader);
+			} finally {
+			    redisUtil.unLock(cacheName.cacheName() + key);
+			}
+		    } else {
+			try {
+			    Thread.sleep(500);
+			} catch (Exception ignore) {
+			} finally {
+			    // 自旋
+			    getObjectFromLoader(cacheName, key, valueLoader);
+			}
+		    }
+		}
+		return (T)value;
+    	}
 ```
