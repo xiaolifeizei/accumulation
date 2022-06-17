@@ -87,11 +87,10 @@
 		    } else {
 			try {
 			    Thread.sleep(500);
-			} catch (Exception ignore) {
-			} finally {
 			    // 自旋
-			    getObjectFromLoader(cacheName, key, valueLoader);
-			}
+			    return getObjectFromLoader(cacheName, key, valueLoader);
+			} catch (Exception ignore) {
+			} 
 		    }
 		}
 		return (T)value;
