@@ -1,7 +1,17 @@
 ### RedisUtil
 
 ```
-  /**
+	/**
+	 * Redis锁前缀
+	 */
+	private static final String LOCK_PREFIX = "_Redis_Lock_";
+
+	/**
+	 * 锁失效时间
+	 */
+	public static final int LOCK_EXPIRE = 500; // ms
+
+  	/**
 	 * 加锁，防止击穿
 	 * @param key 加锁的Key
 	 * @return 是否抢到了锁
