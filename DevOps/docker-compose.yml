@@ -15,7 +15,7 @@ services:
       MYSQL_SERVICE_HOST: mysql
       MYSQL_SERVICE_DB_NAME: nacos
       MYSQL_SERVICE_USER: root
-      MYSQL_SERVICE_PASSWORD: cf1014fmm
+      MYSQL_SERVICE_PASSWORD: 123456
     restart: always
     networks:
       - bridge
@@ -54,7 +54,7 @@ services:
       TZ: Asia/Shanghai
       JAVA_OPTS: -Xmx512m -Xms128
       DUBBO_IP_TO_REGISTRY: 10.0.4.9
-      PARAMS: -Ddubbo.registry.host=cola-basice -Ddubbo.registry.address=nacos://nacos:8848 -Dspring.redis.host=redis -Dspring.datasource.url=jdbc:mysql://mysql:3306/cola?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8 -Dspring.datasource.password=cf1014fmm
+      PARAMS: -Ddubbo.registry.host=cola-basice -Ddubbo.registry.address=nacos://nacos:8848 -Dspring.redis.host=redis -Dspring.datasource.url=jdbc:mysql://mysql:3306/cola?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8 -Dspring.datasource.password=123456
     restart: always
     networks:
       - bridge
