@@ -1,0 +1,82 @@
+version: '3'
+services:
+  nacos:
+    image: nacos/nacos-server
+    container_name: nacos
+    links:
+      - "mysql" 
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    environment:
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_DB_NAME: nacos
+      MYSQL_SERVICE_USER: root
+      MYSQL_SERVICE_PASSWORD: cf1014fmm
+    restart: always
+    networks:
+      - bridge
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - bridge
+
+  mysql:
+    image: mysql:5.7.38
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: cf1014fmm
+    restart: always
+    networks:
+      - bridge
+
+  cola-basice:
+    image: registry.cn-qingdao.aliyuncs.com/cuifeng/cola-service-basics:1.0
+    container_name: cola-basice
+    ports:            ###将端口映射到宿主
+      - "8081:8081"
+      - "20881:20881"
+    links:
+      - "nacos"
+      - "redis"
+      - "mysql"
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: -Xmx512m -Xms128
+      DUBBO_IP_TO_REGISTRY: 10.0.4.9
+      PARAMS: -Ddubbo.registry.host=cola-basice -Ddubbo.registry.address=nacos://nacos:8848 -Dspring.redis.host=redis -Dspring.datasource.url=jdbc:mysql://mysql:3306/cola?serverTimezone=UTC&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8 -Dspring.datasource.password=cf1014fmm
+    restart: always
+    networks:
+      - bridge
+
+  cola-domain:
+    image: registry.cn-qingdao.aliyuncs.com/cuifeng/cola-web-domain:1.0
+    container_name: cola-domain
+    ports:            ###将端口映射到宿主
+      - "8085:8085"
+      - "20889:20889"
+    links:
+      - "nacos"
+      - "redis"
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: -Xmx512m -Xms128
+      DUBBO_IP_TO_REGISTRY: 10.0.4.9
+      PARAMS: -Ddubbo.protocol.host=cola-domain -Ddubbo.registry.address=nacos://nacos:8848 -Dspring.redis.host=redis
+    restart: always
+    networks:
+      - bridge
+
+networks:
+  bridge:
+    driver: bridge
