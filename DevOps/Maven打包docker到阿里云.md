@@ -78,7 +78,7 @@ ENV PARAMS=""
 ENTRYPOINT ["sh","-c","java -Djava.security.egd=file:/dev/./urandom $PARAMS -jar  app.jar"]
 ```
 
-#### 配置Maven命令
+### 配置Maven命令
 
 ```
 clean package docker:build -DpushImage -Dmaven.test.skip=true
