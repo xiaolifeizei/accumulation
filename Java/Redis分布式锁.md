@@ -76,21 +76,28 @@
 		Object value = getObject(cacheName,key);
 
 		if (ObjectUtil.isNull(value)) {
+		    // 分布式锁
 		    RedisUtil redisUtil = SpringUtil.getBean(RedisUtil.class);
-		    boolean lock = redisUtil.lock(cacheName.cacheName() + key);
-		    if (lock) {
-			try {
-			    return getCache(cacheName).get(key,valueLoader);
-			} finally {
-			    redisUtil.unLock(cacheName.cacheName() + key);
+		    String lockKey = cacheName.cacheName() + '_' + key;
+		    for (;;) {
+			boolean lock = redisUtil.lock(lockKey);
+			if (lock) {
+			    try {
+				value = getObject(cacheName,key);
+				// Double Check
+				if (ObjectUtil.isNull(value)) {
+				    return getCache(cacheName).get(key,valueLoader);
+				}
+			    } finally {
+				redisUtil.unLock(lockKey);
+			    }
+			} else {
+			    try {
+				// 自旋
+				Thread.sleep(200);
+			    } catch (InterruptedException ignore) {
+			    }
 			}
-		    } else {
-			try {
-			    Thread.sleep(500);
-			    // 自旋
-			    return getObjectFromLoader(cacheName, key, valueLoader);
-			} catch (Exception ignore) {
-			} 
 		    }
 		}
 		return (T)value;
