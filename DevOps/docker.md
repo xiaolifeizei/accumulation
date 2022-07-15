@@ -96,3 +96,10 @@ docker run -d --name dubbo-admin -p 8080:8080 -e admin.registry.address=zookeepe
 ```
 
 
+### windows10 报 error during connect 错误
+
+```
+cd "C:\Program Files\Docker\Docker"
+
+./DockerCli.exe -SwitchDaemon
+```
