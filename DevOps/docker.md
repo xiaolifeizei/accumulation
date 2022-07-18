@@ -103,3 +103,26 @@ cd "C:\Program Files\Docker\Docker"
 
 ./DockerCli.exe -SwitchDaemon
 ```
+
+### Docker中安装ping、ifconfig、netstat等命令
+
+```bash
+apt-get update
+# 安装net工具
+apt install net-tools
+# 安装ping命令
+apt install iputil-ping
+```
+
+### 进入docker容器
+
+```bash
+docker exec -it 容器名 /bin/bash
+```
+
+### 打印docker运行日志
+
+```bash
+docker logs --tail=500 容器名
+```
+
