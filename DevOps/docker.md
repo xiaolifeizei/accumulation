@@ -112,6 +112,8 @@ apt-get update
 apt install net-tools
 # 安装ping命令
 apt install iputil-ping
+# 安装ifconfig
+apt install net-tools
 ```
 
 ### 进入docker容器
