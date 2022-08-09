@@ -112,6 +112,7 @@ apt-get update
 apt install net-tools
 # 安装ping命令
 apt install iputil-ping
+apt-get install iputils-ping
 # 安装ifconfig
 apt install net-tools
 ```
