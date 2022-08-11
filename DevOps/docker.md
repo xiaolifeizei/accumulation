@@ -129,3 +129,9 @@ docker exec -it 容器名 /bin/bash
 docker logs --tail=500 容器名
 ```
 
+### 从docker容器中拷贝文件
+
+```bash
+docker cp 容器:/usr/local/tomcat/ ~/tomcat/
+```
+

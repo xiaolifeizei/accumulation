@@ -60,4 +60,24 @@
 
 ```
 
+### Nginx日志统计
+
+#### 1.统计Nginx访问最频繁的URL
+
+
+```bash
+awk '{print $7}' access.log|sort | uniq -c |sort -n -k 1 -r|more
+```
+
+#### 2.查询访问最频繁的IP
+
+```bash
+awk '{print $1}' /var/log/nginx/access.log|sort | uniq -c |sort -n -k 1 -r|more
+```
+
+#### 3.  根据时间段统计查看日志
+
+```bash
+cat  /var/log/nginx/access.log| sed -n '/14\/Mar\/2017:21/,/14\/Mar\/2017:22/p'|more
+```
 
