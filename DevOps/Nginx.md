@@ -81,3 +81,10 @@ awk '{print $1}' /var/log/nginx/access.log|sort | uniq -c |sort -n -k 1 -r|more
 cat  /var/log/nginx/access.log| sed -n '/14\/Mar\/2017:21/,/14\/Mar\/2017:22/p'|more
 ```
 
+### 解决Nginx不打印access.log日志
+
+```bash
+rm -f /var/log/nginx/*
+nginx -s reload
+```
+
