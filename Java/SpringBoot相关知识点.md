@@ -110,3 +110,44 @@ classpath:/ < classpath:/config/ < file:./ < file:./config/
 @ImportResource(locations = {"classpath:beans.xml"})
 ```
 
+### 删除Spring事件
+
+```java
+
+@Slf4j
+@AllArgsConstructor
+@Component
+public class MatrixApiLogListener {
+
+	private final IMatrixLogClient logService;
+	private final ServerInfo serverInfo;
+	private final BladeProperties bladeProperties;
+
+
+	@Async
+	@Order(1)
+	@EventListener({ApiLogEvent.class, ContextRefreshedEvent.class})
+	public void saveApiLog(ApplicationEvent event) {
+		if (event instanceof ContextRefreshedEvent)  {
+			ApplicationContext context = (ApplicationContext)event.getSource();
+
+			SimpleApplicationEventMulticaster eventMulticaster = (SimpleApplicationEventMulticaster) context.getBean("applicationEventMulticaster");
+			eventMulticaster.removeApplicationListeners(l -> l instanceof ApplicationListenerMethodAdapter && ((ApplicationListenerMethodAdapter)l).getListenerId().equals("org.springblade.core.log.event.ApiLogListener.saveApiLog(org.springblade.core.log.event.ApiLogEvent)"));
+			eventMulticaster.removeApplicationListeners(l -> l instanceof ApplicationListenerMethodAdapter && ((ApplicationListenerMethodAdapter)l).getListenerId().equals("org.springblade.core.log.event.ErrorLogListener.saveErrorLog(org.springblade.core.log.event.ErrorLogEvent)"));
+			eventMulticaster.removeApplicationListeners(l -> l instanceof ApplicationListenerMethodAdapter && ((ApplicationListenerMethodAdapter)l).getListenerId().equals("org.springblade.core.log.event.UsualLogListener.saveUsualLog(org.springblade.core.log.event.UsualLogEvent)"));
+
+			eventMulticaster.removeApplicationListenerBean("apiLogListener");
+			eventMulticaster.removeApplicationListenerBean("errorLogListener");
+			eventMulticaster.removeApplicationListenerBean("usualLogListener");
+
+		} else {
+			Map<String, Object> source = (Map<String, Object>) event.getSource();
+			LogApi logApi = (LogApi) source.get(EventConstant.EVENT_LOG);
+			LogAbstractUtil.addOtherInfoToLog(logApi, bladeProperties, serverInfo);
+			logService.saveApiLog(logApi);
+		}
+	}
+}
+
+```
+
