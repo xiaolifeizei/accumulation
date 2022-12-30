@@ -1,7 +1,8 @@
 ### 1、关闭防火墙
 
 ```bash
-systemctl stop firewalld.service & systemctl disable firewalld.service
+systemctl stop firewalld.service 
+systemctl disable firewalld.service
 ```
 
 ### 2、删除
@@ -81,7 +82,7 @@ vim /data/mysql8.0.31/my.cnf
 
 写入以下内容
 
-```bash
+```ini
 [mysql]
 # 默认字符集
 default-character-set=utf8mb4
@@ -118,7 +119,46 @@ lower_case_table_names=1
 autocommit=1
 
 # 创建新表时将使用的默认存储引擎
-default_storage_engine=InnoDB                                     
+default_storage_engine=InnoDB 
+
+#binlog的格式也有三种：STATEMENT，ROW，MIXED。
+binlog-format=mixed
+#binlog过期清理时间
+expire_logs_days=7
+#binlog每个日志文件大小
+max_binlog_size=1000m
+#binlog缓存大小
+binlog_cache_size=100m
+max_binlog_cache_size=512m
+#发生事务时非事务语句的缓存的大小
+binlog_stmt_cache_size=100m
+max_binlog_stmt_cache_size=100m
+
+
+#优化设置-------------------------------------------
+#启用admin_port，连接数爆满等紧急情况下给管理员留个后门
+admin_address = 127.0.0.1
+admin_port = 33062
+
+#performance setttings
+lock_wait_timeout = 3600
+open_files_limit    = 65535
+back_log = 1024
+max_connections = 512
+max_connect_errors = 1000000
+table_open_cache = 1024
+table_definition_cache = 1024
+thread_stack = 512K
+sort_buffer_size = 4M
+join_buffer_size = 4M
+read_buffer_size = 8M
+read_rnd_buffer_size = 4M
+bulk_insert_buffer_size = 64M
+thread_cache_size = 768
+interactive_timeout = 600
+wait_timeout = 600
+tmp_table_size = 32M
+max_heap_table_size = 32M
 ```
 
 ### 9、初始化
