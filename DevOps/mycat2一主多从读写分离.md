@@ -302,4 +302,48 @@ vim /data/mycat/conf/logback.xml
 tail -f /data/mycat/logs/wrapper.log
 ```
 
+### 16、添加系统服务
+
+新建配置文件
+
+```bash
+vim /usr/lib/systemd/system/mycat.service
+```
+
+输入以下内容
+
+```bash
+[Unit]
+Description=mycat
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+
+Environment="JAVA_HOME=/data/jdk1.8.0_351"
+Environment="PATH=$JAVA_HOME/bin:$PATH"
+Environment="CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tool.jar"
+
+PIDFile=/data/mycat/logs/mycat.pid
+ExecStart=/data/mycat/bin/mycat start
+ExecReload=/data/mycat/bin/mycat restart
+ExecStop=/data/mycat/bin/mycat stop
+PrivateTmp=false
+
+[Install]
+WantedBy=multi-user.target
+```
+
+让服务生效
+
+```bash
+systemctl daemon-reload
+```
+
+启动服务
+
+```bash
+systemctl start mysql
+```
+
 ### 
