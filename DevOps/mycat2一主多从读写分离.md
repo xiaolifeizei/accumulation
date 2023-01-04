@@ -104,13 +104,13 @@ vim /data/mycat/conf/users/root.user.json
 ### 7、启动mycat
 
 ```bash
-/data/mycat/bin/./mycat start
+./mycat start
 ```
 
 如果查看启动结果
 
 ```bash
-/data/mycat/bin/./mycat console
+./mycat console
 ```
 
 ### 8、登录mycat并创建数据库
@@ -293,7 +293,7 @@ vim /data/mycat/conf/logback.xml
 ### 14、重启mycat
 
 ```bash
-/data/mycat/bin/./mycat restart
+./mycat restart
 ```
 
 ### 15、查看日志输出
@@ -315,20 +315,14 @@ vim /usr/lib/systemd/system/mycat.service
 ```bash
 [Unit]
 Description=mycat
-After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
-
-Environment="JAVA_HOME=/data/jdk1.8.0_351"
-Environment="PATH=$JAVA_HOME/bin:$PATH"
-Environment="CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tool.jar"
-
-PIDFile=/data/mycat/logs/mycat.pid
+User=root
 ExecStart=/data/mycat/bin/mycat start
 ExecReload=/data/mycat/bin/mycat restart
 ExecStop=/data/mycat/bin/mycat stop
-PrivateTmp=false
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
@@ -340,10 +334,35 @@ WantedBy=multi-user.target
 systemctl daemon-reload
 ```
 
+修改wrapper.conf
+
+```bash
+vim /data/mycat/conf/wrapper.conf
+```
+
+修改`wrapper.java.command`
+
+```ini
+wrapper.java.command=/data/jdk1.8.0_351/bin/java
+```
+
 启动服务
 
 ```bash
-systemctl start mysql
+systemctl start mycat
 ```
 
-### 
+设置开启启动
+
+```bash
+systemctl enable mycat
+```
+
+查看启动日志
+
+```bash
+tail -f /data/mycat/logs/wrapper.log
+```
+
+
+

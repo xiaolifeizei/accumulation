@@ -234,6 +234,12 @@ systemctl daemon-reload
 systemctl start mysql
 ```
 
+设置开机启动
+
+```bash
+systemctl enable mysql
+```
+
 ### 12、登录
 
 没有密码登录

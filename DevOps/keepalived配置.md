@@ -243,6 +243,12 @@ systemctl start keepalived
 ip addr
 ```
 
+或者
+
+```bash
+hostname -I
+```
+
 ### 7、设置开机启动
 
 ```bash
