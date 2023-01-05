@@ -419,6 +419,7 @@ vim /data/redis-6.2.8/redis.conf
 bind 0.0.0.0
 daemonize yes
 requirepass 123456
+masterauth 123456
 tcp-backlog 127
 logfile "/data/redis-6.2.8/redis.log"
 ```
@@ -496,7 +497,7 @@ logfile "/data/redis-6.2.8/sentinel.log"
 sentinel monitor mymaster 192.168.230.200 6379 2
 sentinel auth-pass mymaster 123456
 tcp-backlog 127
-sentinel down-after-milliseconds mymaster 10000
+sentinel down-after-milliseconds mymaster 5000
 ```
 
 ### 11、将Redis添加为系统服务
