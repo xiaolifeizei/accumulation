@@ -25,3 +25,7 @@ https://grafana.com/grafana/dashboards/7362-mysql-overview/
 2、windows
 
 https://grafana.com/grafana/dashboards/14694-windows-exporter-dashboard/
+
+3、Druid
+
+https://grafana.com/grafana/dashboards/11157-druid-connection-pool-dashboard/
