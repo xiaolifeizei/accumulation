@@ -86,7 +86,7 @@ C:\Users\当前登录用户名\.ssh\id_rsa.pub
 
 6、文件中的内容就是我们需要的ssh key
 
-![image-20230411103641802](https://raw.githubusercontent.com/xiaolifeizei/myImages/master/picgo/image-20230411103641802.png)
+![image-20230411105025103](https://raw.githubusercontent.com/xiaolifeizei/myImages/master/picgo/image-20230411105025103.png)
 
 7、解决 git SSL certificate problem: self signed certificate
 
